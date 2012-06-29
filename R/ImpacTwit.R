@@ -287,12 +287,15 @@ impacTwit <- function(searchString){
     #### so I can use rbind
     master.df <- data.frame(matrix(NA,ncol=6,nrow=0))
     colnames(master.df) <-  c("Tweet ID","ScreenName","Timestamp","origin","followerCount","sourceIndex")
-  
+    test <- searchTwitter(searchString[1], n=1)
+    if(length(test)<1){cat("Nobody cares about this on twitter, sorry :(")
+                      }
     n.searches <- length(searchString)
     if (!is.character(searchString)){
       cat("Hey, you need a valid search string, those aren't real words!")
-      return(NULL)}
+    }
     for(i in 1:n.searches){
+      
       my.search <- searchTwitter(searchString[i], n=1000)
       tmp.tweet.df <- extractTwitdat(my.search)
       tmp.tweet.df <- findOrig(tmp.tweet.df)
@@ -335,7 +338,7 @@ for(x in 1:length(influencers)){
 
 if.df <- tweet.dat[i.index,]
 ####This plot will center them all on 0
-ggplot(if.df,aes(x=sinceRetweet,y=csByorigin,colour=origin,group=origin))+geom_point()+geom_line()+xlab("Time since original tweet (minutes)")+ylab("Cumulative sum of potential viewers")
+ggplot(if.df,aes(x=sinceRetweet,y=csByorigin,colour=origin,group=origin))+geom_point()+geom_line()+xlab("Time since original tweet that was retweeted (minutes)")+ylab("Cumulative sum of potential viewers")
 ###OR let them come in naturally
 ggplot(if.df,aes(x=timeSinceOrig,y=csByorigin,colour=origin,group=origin))+geom_point()+geom_line()+xlab("Time since very first tweet (minutes)")+ylab("Cumulative sum of potential viewers")
 
