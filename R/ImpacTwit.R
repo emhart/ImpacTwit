@@ -53,8 +53,8 @@ extractUserdat <- function(tweet.df){
   loops <- 1+length(users)%/%99
   count <- 1
   for (i in 1:loops){
-    
-    usersString <- paste(users[!is.na(users[count:(count+99)])],collapse=",")
+    user.ind <- count:(count+99)
+    usersString <- paste(users[user.ind[!is.na(users[user.ind])]],collapse=",")
     myurl <- paste("https://api.twitter.com/1/users/lookup.json?screen_name=",usersString,"&include_entities=false",sep="")
     status.dat <- getURL(myurl)
     status.dat <- fromJSON(status.dat)
@@ -316,12 +316,11 @@ return(master.df)
 
 
 ################## Tutorial #########
-#### This uses a recent 
+
 
 test.str <- c("Scientists think math is hard too","http://www.pnas.org/content/early/2012/06/22/1205259109.abstract","Heavy use of equations impedes communication among biologists")
 tweet.dat <- impacTwit(test.str)
 
-###Make a nice little plot.
 
 #### First we can look at the total spread of a tweet from all sources
 ggplot(tweet.dat,aes(x=timeSinceOrig,y=cSum))+geom_point()+geom_line()+xlab("Time since first tweet (minutes)")+ylab("Cumulative sum of potential viewers")
@@ -331,7 +330,7 @@ ggplot(tweet.dat,aes(x=timeSinceOrig,y=cSum))+geom_point()+geom_line()+xlab("Tim
 #### This can probably be done faster with plyr or something but I'm not
 #### that facile with it.
 retweet.count <- table(tweet.dat$origin)
-influencers <- retweet.count[which(retweet.count >=5)]
+influencers <- retweet.count[which(retweet.count >=4)]
 i.index <- vector()
 for(x in 1:length(influencers)){
   i.index <- c(i.index,which(tweet.dat$origin==names(influencers)[x]))}
