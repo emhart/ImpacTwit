@@ -318,9 +318,8 @@ return(master.df)
 ################## Tutorial #########
 
 
-test.str <- c("Scientists think math is hard too","http://www.pnas.org/content/early/2012/06/22/1205259109.abstract","Heavy use of equations impedes communication among biologists")
+test.str <- c("http://www.plosbiology.org/article/info%3Adoi%2F10.1371%2Fjournal.pbio.1001356","A 21st genetics curriculum","10.1371/journal.pbio.1001356")
 tweet.dat <- impacTwit(test.str)
-
 
 #### First we can look at the total spread of a tweet from all sources
 ggplot(tweet.dat,aes(x=timeSinceOrig,y=cSum))+geom_point()+geom_line()+xlab("Time since first tweet (minutes)")+ylab("Cumulative sum of potential viewers")
@@ -330,7 +329,7 @@ ggplot(tweet.dat,aes(x=timeSinceOrig,y=cSum))+geom_point()+geom_line()+xlab("Tim
 #### This can probably be done faster with plyr or something but I'm not
 #### that facile with it.
 retweet.count <- table(tweet.dat$origin)
-influencers <- retweet.count[which(retweet.count >=4)]
+influencers <- retweet.count[which(retweet.count >=3)]
 i.index <- vector()
 for(x in 1:length(influencers)){
   i.index <- c(i.index,which(tweet.dat$origin==names(influencers)[x]))}
@@ -352,4 +351,8 @@ tweet.dat$source[which(tweet.dat$source==3)] = "Article Title"
 ggplot(tweet.dat,aes(x=sinceTweetSource,y=csBySource,colour=source,group=source))+geom_point()+geom_line()+xlab("Time since original source tweet (minutes)")+ylab("Cumulative sum of potential viewers")
 
 ggplot(tweet.dat,aes(x=timeSinceOrig,y=csBySource,colour=source,group=source))+geom_point()+geom_line()+xlab("Time since first tweet (minutes)")+ylab("Cumulative sum of potential viewers")
+
+
+
+
 
